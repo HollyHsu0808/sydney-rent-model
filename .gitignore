@@ -1,0 +1,9 @@
+# local-only build inputs and outputs
+pitch/anim_assets.json
+pitch/*.pptx
+__pycache__/
+*.pyc
+.env
+data_private/
+.DS_Store
+Thumbs.db

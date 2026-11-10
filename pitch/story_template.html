@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flat by Flat</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a night survey of the city. Full-bleed LiDAR bands, one sticky "climb the tower" sequence, quiet text between. */
+:root {
+  --night: #0A1C26;      /* page ground: harbour at night */
+  --deck: #10293A;       /* raised surfaces */
+  --fog: #DDE7EB;        /* primary text */
+  --mist: #93A9B4;       /* secondary text */
+  --sea: #35B4C6;        /* water in line of sight */
+  --sand: #E3A957;       /* Sydney sandstone: the tower, the one accent */
+  --line: #24465A;
+  --display: "Archivo", "Arial Narrow", Arial, sans-serif;
+  --body: "Public Sans", "Segoe UI", Arial, sans-serif;
+  --mono: "IBM Plex Mono", Consolas, "Courier New", monospace;
+  color-scheme: dark;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--night); color: var(--fog); font: 17px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; display: block; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+.eyebrow { font: 500 12px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--sea); }
+h1, h2 { font-family: var(--display); font-stretch: 112%; text-wrap: balance; margin: 0; letter-spacing: -.01em; }
+h2 { font-weight: 800; font-size: clamp(30px, 4.6vw, 54px); line-height: 1.04; }
+p { margin: 0; max-width: 62ch; }
+.lede { font-size: clamp(18px, 1.6vw, 21px); color: var(--fog); }
+.note { font: 400 12.5px/1.55 var(--mono); color: var(--mist); max-width: 80ch; }
+section { padding-block: clamp(72px, 10vw, 140px); }
+.stack { display: grid; gap: 22px; }
+.num { font-family: var(--display); font-stretch: 125%; font-weight: 900; font-variant-numeric: tabular-nums; line-height: .95; }
+
+/* hero */
+.hero { position: relative; padding-block: 0; overflow: hidden; background: #071822; }
+.hero-img { width: 100%; aspect-ratio: 16 / 9; max-height: 92vh; object-fit: cover; transform-origin: 52% 38%; animation: drift 38s ease-in-out infinite alternate; }
+.hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(7,24,34,.92) 0%, rgba(7,24,34,.55) 42%, rgba(7,24,34,0) 70%); pointer-events: none; }
+.hero-copy { position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; }
+.hero-copy .wrap { width: 100%; display: grid; gap: 18px; }
+.hero h1 { font-weight: 900; font-size: clamp(48px, 9vw, 128px); line-height: .9; font-stretch: 125%; }
+.hero .sub { font-size: clamp(17px, 2vw, 24px); color: var(--fog); max-width: 30ch; }
+.hero .meta { font: 400 12px/1.5 var(--mono); color: var(--mist); letter-spacing: .06em; }
+.rise { animation: rise .9s cubic-bezier(.2,.7,.2,1) both; }
+.rise.d2 { animation-delay: .25s; } .rise.d3 { animation-delay: .5s; }
+@keyframes rise { from { transform: translateY(18px); opacity: .25; } to { transform: none; opacity: 1; } }
+@keyframes drift { from { transform: scale(1.02) translate(0,0); } to { transform: scale(1.14) translate(-2%, 1.5%); } }
+
+/* puzzle */
+.puzzle { display: grid; grid-template-columns: 1.2fr 1fr; gap: clamp(28px, 5vw, 72px); align-items: end; }
+.puzzle .num { font-size: clamp(76px, 13vw, 176px); color: var(--sand); }
+.puzzle .num small { display: block; font-size: 22px; font-weight: 600; color: var(--fog); font-stretch: 100%; margin-top: 10px; letter-spacing: 0; }
+
+/* survey counters */
+.survey { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 64px); align-items: center; }
+.counters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 24px; }
+.counter .num { font-size: clamp(32px, 3.6vw, 48px); color: var(--fog); white-space: nowrap; }
+.counter .lbl { font: 500 12px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mist); margin-top: 8px; }
+.survey figure { margin: 0; border-radius: 4px; overflow: hidden; border: 1px solid var(--line); }
+.survey figcaption { padding: 10px 14px; background: var(--deck); }
+
+/* climb */
+.climb { background: linear-gradient(#0A1C26, #081620 60%, #0A1C26); }
+.climb-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 48px); align-items: center; }
+.side { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1fr); gap: clamp(16px, 2.6vw, 32px); align-items: center; }
+.tower { position: relative; width: 100%; max-width: 100%; }
+.tower svg { display: block; width: 100%; height: auto; overflow: visible; }
+.tower .fl { fill: #2B5267; stroke: #4A7488; stroke-width: .6; transition: fill .25s; }
+.tower .fl.past { fill: rgba(227,169,87,.30); }
+.tower .fl.now { fill: var(--sand); }
+.tower .wb { fill: #3E7F8C; opacity: .55; transition: opacity .25s; }
+.tower .wb.past { fill: var(--sea); }
+.tower .wb.past { opacity: .9; }
+.tower .t { font: 500 12px var(--mono); fill: var(--fog); }
+.tower .t.now { fill: var(--sand); font-size: 13px; font-weight: 600; }
+.tower .cap { font: 500 11px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mist); margin-top: 10px; }
+.stage { position: relative; aspect-ratio: 1 / 1; width: 100%; max-width: 100%; border-radius: 4px; overflow: hidden; border: 1px solid var(--line); background: #06141c; }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.readout { display: grid; gap: 26px; }
+.readout .floor { font-size: clamp(52px, 6vw, 88px); color: var(--fog); }
+.readout .water { font-size: clamp(40px, 4.6vw, 62px); color: var(--sea); }
+.legend { display: flex; flex-wrap: wrap; gap: 10px; font: 500 13.5px/1.2 var(--mono); color: var(--fog); }
+.legend span { display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px 8px 12px; background: #17384B; border: 1px solid #3A6378; border-radius: 999px; }
+.legend i { display: inline-block; width: 28px; height: 6px; border-radius: 3px; box-shadow: 0 0 10px currentColor; }
+.controls { display: flex; gap: 14px; align-items: center; }
+.controls button { font: 600 13px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--night); background: var(--sand); border: 0; border-radius: 999px; padding: 11px 18px; cursor: pointer; }
+.controls button:focus-visible, input[type=range]:focus-visible { outline: 2px solid var(--sea); outline-offset: 3px; }
+input[type=range] { flex: 1; accent-color: var(--sand); min-width: 0; }
+.first { font: 500 13px/1.4 var(--mono); color: var(--sand); min-height: 1.4em; }
+
+/* insight */
+.insight { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+.insight > div { background: var(--night); padding: 28px 26px; display: grid; gap: 10px; align-content: start; }
+.insight .num { font-size: clamp(38px, 4.4vw, 56px); }
+
+/* ladder */
+.ladder { display: grid; gap: 0; counter-reset: rung; border-left: 2px solid var(--line); margin-left: 10px; }
+.rung { position: relative; padding: 0 0 30px 34px; display: grid; gap: 4px; }
+.rung::before { counter-increment: rung; content: counter(rung); position: absolute; left: -15px; top: -2px; width: 28px; height: 28px; border-radius: 50%; background: var(--deck); border: 2px solid var(--sea); color: var(--fog); font: 600 13px/24px var(--mono); text-align: center; }
+.rung.view::before { border-color: var(--sand); content: "+"; }
+.rung h3 { margin: 0; font: 700 20px/1.3 var(--display); font-stretch: 105%; }
+.rung p { color: var(--mist); font-size: 15.5px; }
+.ladder-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 72px); }
+
+/* proof */
+.proof { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
+.dots { display: grid; grid-template-columns: repeat(10, 1fr); gap: 7px; }
+.dots span { aspect-ratio: 1; border-radius: 50%; background: var(--sea); }
+.dots span.lo { background: var(--sand); } .dots span.hi { background: #B9C8D0; }
+.dots.play span { animation: pop .5s cubic-bezier(.2,.8,.2,1.2) both; }
+@keyframes pop { from { transform: scale(.2); opacity: .2; } to { transform: none; opacity: 1; } }
+.proof-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px; }
+.proof-stats .num { font-size: clamp(54px, 7vw, 92px); }
+.timeline { display: flex; gap: 0; margin-top: 8px; font: 400 12.5px/1.4 var(--mono); color: var(--mist); }
+.timeline div { flex: 1; padding-top: 12px; border-top: 2px solid var(--line); position: relative; }
+.timeline div::before { content: ""; position: absolute; top: -7px; left: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--sea); }
+.timeline div:first-child::before { background: var(--sand); }
+.timeline b { display: block; color: var(--fog); font-weight: 500; }
+
+/* next + ask */
+.next { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.next > div { border-top: 2px solid var(--sea); padding-top: 16px; display: grid; gap: 8px; align-content: start; }
+.next h3 { margin: 0; font: 700 19px/1.3 var(--display); font-stretch: 105%; }
+.next p { color: var(--mist); font-size: 15.5px; }
+.ask { background: var(--deck); }
+.ask h2 { font-size: clamp(34px, 5.4vw, 64px); }
+.ask .line { font-family: var(--mono); color: var(--sand); font-size: 15px; }
+footer { padding-block: 34px; border-top: 1px solid var(--line); }
+
+@media (max-width: 860px) {
+  .puzzle, .survey, .climb-grid, .ladder-wrap, .proof { grid-template-columns: minmax(0, 1fr); }
+  .insight, .next { grid-template-columns: minmax(0, 1fr); }
+  .hero::after { background: linear-gradient(180deg, rgba(7,24,34,.2) 0%, rgba(7,24,34,.92) 70%); }
+  .hero-copy { align-items: flex-end; padding-bottom: 28px; }
+  .hero-img { aspect-ratio: 4 / 5; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <img class="hero-img" src="data:image/jpeg;base64,__HERO__" alt="Shaded LiDAR surface of central Sydney: towers, streets and the harbour, from the 2020 NSW survey at 1 m resolution">
+  <div class="hero-copy">
+    <div class="wrap">
+      <div class="eyebrow rise">A city rebuilt, flat by flat</div>
+      <h1 class="rise d2">Flat by Flat</h1>
+      <p class="sub rise d3">I traced Sydney's views to understand why rents split inside the same building.</p>
+      <p class="meta rise d3">[Your name] · City of Sydney rental modelling · Microburbs Hackathon Task 4 follow-up</p>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap puzzle">
+    <div class="stack">
+      <div class="eyebrow">One address</div>
+      <h2>The address matches. The asking rents don't.</h2>
+      <p class="lede">I found flats sharing a building and bedroom count with asking rents far apart. I wanted to see what the address left out, so I started with the city around them.</p>
+    </div>
+    <div class="stack">
+      <div class="num" data-count="1000" data-prefix="$">$1,000<small>a week apart</small></div>
+      <p class="note">Largest raw, unadjusted spread in the Jun–Jul 2026 holdout. Same building, 3-bed, 8 flats. Small group; no names.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap survey">
+    <div class="stack">
+      <div class="eyebrow">Rebuild the city</div>
+      <h2>To look out from every floor, I rebuilt the city.</h2>
+      <p class="lede">The scans gave me streets, trees and rooftops. I traced 36 sightlines from each floor, one every 10°, out to 1.5 km in 5 m steps. Each line showed where buildings and trees blocked the view. Then I climbed.</p>
+      <div class="counters">
+        <div class="counter"><div class="num" data-count="4399">4,399</div><div class="lbl">residential buildings</div></div>
+        <div class="counter"><div class="num" data-count="29970">29,970</div><div class="lbl">floors measured</div></div>
+        <div class="counter"><div class="num" data-count="36">36</div><div class="lbl">sightlines per floor</div></div>
+        <div class="counter"><div class="num" data-count="79">79</div><div class="lbl">buildings appearing between surveys</div></div>
+      </div>
+    </div>
+    <figure>
+      <img src="data:image/jpeg;base64,__NEWB__" alt="Map of the City of Sydney with the 79 residential buildings that appear between the 2013 and 2020 LiDAR surveys marked in sandstone">
+      <figcaption class="note">Public NSW surveys, 2013 and 2020, on a 1 m grid. New buildings identified from scan differences.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="climb" id="climb">
+  <div class="wrap stack">
+    <div class="stack">
+      <div class="eyebrow">Come up with me</div>
+      <h2>At first, the harbour is hidden.</h2>
+    </div>
+    <div class="climb-grid">
+      <div class="stage"><canvas id="stage" aria-label="Animated map: 36 sightlines from one harbourside tower, redrawn for each floor"></canvas></div>
+      <div class="stack" style="gap:26px">
+        <div class="side">
+          <div class="tower">
+            <svg id="towerSvg" viewBox="0 0 170 430" role="img" aria-label="The tower drawn floor by floor: the current floor is highlighted, and a bar beside each floor shows how many directions see water"></svg>
+          </div>
+          <div class="readout">
+            <div><div class="eyebrow">Floor</div><div class="num floor" id="floorNum">43</div></div>
+            <div><div class="eyebrow">Directions with water</div><div class="num water"><span id="waterNum">15</span><span style="color:var(--mist);font-size:.45em"> / 36</span></div></div>
+            <div class="first" id="firstNote">The harbour first appears at floor 9.</div>
+          </div>
+        </div>
+        <div class="legend"><span><i style="background:var(--sea);color:var(--sea)"></i>Water visible</span><span><i style="background:#F2F6F8;color:rgba(242,246,248,.5)"></i>Land visible</span><span><i style="background:var(--sand);color:var(--sand)"></i>This tower</span></div>
+        <div class="controls"><button id="play" type="button">Start climbing</button><input id="floorRange" type="range" min="0" max="43" value="43" aria-label="Floor"></div>
+      </div>
+    </div>
+    <p class="note">This tower first sees water at floor 9; floor 43 sees it in 15 of 36 directions. Measures describe possible views from a floor; a flat's orientation is unknown.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap stack" style="gap:34px">
+    <div class="stack">
+      <div class="eyebrow">Read the pattern</div>
+      <h2>The building anchors the rent. The view helps separate flats.</h2>
+    </div>
+    <div class="insight">
+      <div><div class="num" style="color:var(--sea)">15.5%</div><p>of measured floors have water in sight in at least one direction.</p></div>
+      <div><div class="num" style="color:var(--sand)">≈ +4%</div><p>rent associated with water in a quarter of directions, versus none, within the same building.</p></div>
+      <div><div class="num">2,912</div><p>building groups in the view analysis, covering 22,905 adverts.</p></div>
+    </div>
+    <p class="note">Within-building estimate, Jun–Jul 2026 holdout. 0.168 log points per full share of water-view directions; no CI yet. “Building first, view second” is my interpretation, not a measured decomposition.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap ladder-wrap">
+    <div class="stack">
+      <div class="eyebrow">Follow the evidence</div>
+      <h2>I price the flat from the evidence closest to it.</h2>
+      <p class="lede">That became my modelling rule. Start with the flat's own adverts, then its building, then its suburb. Keep the view adjustment inside the building, where the comparison makes sense.</p>
+    </div>
+    <div class="ladder">
+      <div class="rung"><h3>Start with its own adverts</h3><p>I move past asking rents to the valuation date using a same-flat repeat-rent index.</p></div>
+      <div class="rung"><h3>Check how old they are</h3><p>I set own history aside after 36 months, so an old advert cannot anchor the estimate indefinitely.</p></div>
+      <div class="rung"><h3>Let neighbouring flats count equally</h3><p>I use same-building comparables with one flat, one vote. Repeated adverts for one flat cannot dominate.</p></div>
+      <div class="rung view"><h3>Adjust views within the building</h3><p>I apply a small LiDAR view adjustment within the building, using the view measured for each floor.</p></div>
+      <div class="rung"><h3>Widen to the suburb</h3><p>When closer evidence runs out, I use suburb and bedroom comparisons.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="climb">
+  <div class="wrap stack" style="gap:34px">
+    <div class="stack">
+      <div class="eyebrow">Frozen, then checked</div>
+      <h2>The next adverts put my estimates to the test.</h2>
+    </div>
+    <div class="proof">
+      <div class="dots" id="dots" role="img" aria-label="100 dots: 80 inside the range, 14 below, 6 above"></div>
+      <div class="stack">
+        <div class="proof-stats">
+          <div><div class="num" style="color:var(--fog)">$45</div><p class="note" style="color:var(--fog)">median absolute error per week for unchanged v1 on my 1,898 Aug–Sep adverts.</p></div>
+          <div><div class="num" style="color:var(--sea)">80.2%</div><p class="note" style="color:var(--fog)">of those adverts fell inside exploratory v2's nominal 80% ranges from historical walk-forward errors.</p></div>
+        </div>
+        <div class="timeline">
+          <div><b>31 Jul 2026</b>training-advert cut-off</div>
+          <div><b>November</b>v1 built; Aug–Sep adverts checked</div>
+          <div><b>v2 locked after v1 check; scored once</b></div>
+        </div>
+        <p class="note">v2 followed v1's scores; it was selected on pre-cut-off walk-forward data, hash-locked and scored once. Own sample; asking rents. Aug–Sep misses were 14.2% below and 5.5% above. Over the 1 Oct–1 Nov extended horizon, v2 coverage was 81.5%. On the same Jun–Jul 2026 holdout, median errors were $45 here versus $46.1 for GBDT on the same features. Dots round the percentages.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap stack" style="gap:34px">
+    <div class="stack">
+      <div class="eyebrow">Keep improving</div>
+      <h2>Now I know what to test next.</h2>
+    </div>
+    <div class="next">
+      <div><h3>Check every kind of estimate</h3><p>I'll check coverage, width and bias by tier and horizon on a shared evaluation set. Aug–Sep coverage remains inconclusive in each no-own-history tier.</p></div>
+      <div><h3>Test an adjustment for bias</h3><p>More misses fell below the ranges than above. I'll select a bias adjustment using earlier data and test it on separate data.</p></div>
+      <div><h3>Put bounds on the view</h3><p>I'll estimate a confidence interval for the view association, then test whether changing building stock helps explain gaps between same-flat growth and suburb medians.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="ask">
+  <div class="wrap stack">
+    <div class="eyebrow">Let's keep building</div>
+    <h2>I'd like to keep doing this work.</h2>
+    <p class="lede">I set the direction and did the modelling for this Task 4 entry. I'm looking for short-term, part-time modelling work, and I'd like to keep improving Flat by Flat with Microburbs.</p>
+    <p class="line">[email] · [link]</p>
+  </div>
+</section>
+
+<footer><div class="wrap note">LiDAR © State of New South Wales (Spatial Services), CC BY 4.0, via ELVIS. Water and parks © OpenStreetMap contributors, ODbL. No organiser data, per-flat predictions or named-building rents appear on this page.</div></footer>
+
+<script>
+const D = __RAYS__;
+const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---- counters: final values are in the HTML; count up once when first seen ---- */
+const fmt = (n, p) => (p || "") + Math.round(n).toLocaleString("en-AU");
+const countIO = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return; countIO.unobserve(e.target);
+  if (reduce) return;
+  const el = e.target, to = +el.dataset.count, p = el.dataset.prefix || "", small = el.querySelector("small");
+  const t0 = performance.now(), dur = 1400;
+  const tick = t => { const k = Math.min(1, (t - t0) / dur), v = to * (1 - Math.pow(1 - k, 3));
+    el.firstChild.nodeValue = fmt(v, p); if (k < 1) requestAnimationFrame(tick); };
+  if (el.firstChild.nodeType !== 3) el.insertBefore(document.createTextNode(""), el.firstChild);
+  requestAnimationFrame(tick);
+}), { threshold: .4 });
+document.querySelectorAll("[data-count]").forEach(el => countIO.observe(el));
+
+/* ---- dot grid: 6 above, 80 inside, 14 below ---- */
+const dots = document.getElementById("dots");
+for (let i = 0; i < 100; i++) { const s = document.createElement("span"); if (i < 6) s.className = "hi"; else if (i >= 86) s.className = "lo"; s.style.animationDelay = (i * 18) + "ms"; dots.appendChild(s); }
+new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting) { dots.classList.add("play"); o.disconnect(); } }), { threshold: .4 }).observe(dots);
+
+/* ---- climb the tower ---- */
+const cv = document.getElementById("stage"), ctx = cv.getContext("2d");
+const img = new Image(); img.src = "data:image/jpeg;base64,__TOWER__";
+const floorNum = document.getElementById("floorNum"), waterNum = document.getElementById("waterNum"), firstNote = document.getElementById("firstNote");
+const range = document.getElementById("floorRange"), btn = document.getElementById("play");
+const NF = D.floors.length, FIRST = D.floors.findIndex(f => f.w > 0);
+let floor = NF - 1, grow = 1, raf = null;
+
+/* tower: one band per floor; bar on the right = directions with water; marker on the left = current floor */
+const NS = "http://www.w3.org/2000/svg", svg = document.getElementById("towerSvg");
+const TB = 400, FH = 360 / NF, BX = 52, BW = 62, WMAX = 46;
+const mk = (tag, at) => { const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); svg.appendChild(e); return e; };
+mk("rect", { x: BX - 6, y: TB - NF * FH - 14, width: BW + 12, height: 10, rx: 2, fill: "#24465A" });          /* roof */
+mk("line", { x1: 0, y1: TB + 1, x2: 170, y2: TB + 1, stroke: "#24465A", "stroke-width": 2 });                 /* ground */
+const bands = [], bars = [];
+D.floors.forEach((f, i) => {
+  const y = TB - (i + 1) * FH;
+  bands.push(mk("rect", { class: "fl", x: BX, y: y + .6, width: BW, height: FH - 1.2 }));
+  bars.push(mk("rect", { class: "wb", x: BX + BW + 5, y: y + .9, width: Math.max(0, f.w / 36 * WMAX * 2.4), height: FH - 1.8, rx: 1 }));
+});
+const yF = TB - (FIRST + 1) * FH + FH;                                                                          /* bottom of the first water floor */
+mk("line", { x1: BX - 10, y1: yF, x2: 168, y2: yF, stroke: "#E3A957", "stroke-width": 1, "stroke-dasharray": "3 3", opacity: .7 });
+const tFirst = mk("text", { class: "t", x: 168, y: yF + 13, "text-anchor": "end" }); tFirst.textContent = "floor " + FIRST;
+const marker = mk("path", { d: "M0,-6 L9,0 L0,6 Z", fill: "#E3A957" });
+const mLabel = mk("text", { class: "t now", x: 0, y: 0, "text-anchor": "end" });
+function updateTower(fl) {
+  bands.forEach((b, i) => b.setAttribute("class", "fl" + (i === fl ? " now" : i < fl ? " past" : "")));
+  bars.forEach((b, i) => b.setAttribute("class", "wb" + (i <= fl ? " past" : "")));
+  const y = TB - (fl + .5) * FH;
+  marker.setAttribute("transform", `translate(${BX - 13},${y})`);
+  mLabel.setAttribute("x", BX - 17); mLabel.setAttribute("y", y + 4.5); mLabel.textContent = fl;
+}
+
+function size() { const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = r.width * dpr; cv.height = r.height * dpr; draw(); }
+function draw() {
+  const W = cv.width, s = W / D.px, cx = D.cx * s, cy = D.cy * s;
+  ctx.globalAlpha = 1; ctx.drawImage(img, 0, 0, W, W);
+  ctx.fillStyle = "rgba(6,20,28,.22)"; ctx.fillRect(0, 0, W, W);
+  const f = D.floors[floor], maxd = 1500 * grow, lw = Math.max(1.4, W / 520);
+  ctx.lineCap = "round";
+  for (let k = 0; k < 36; k++) {
+    const a = k * Math.PI / 18, dx = Math.cos(a), dy = -Math.sin(a);
+    for (const [j0, j1, w] of f.r[k]) {
+      const d0 = (j0 + 1) * D.step, d1 = Math.min((j1 + 1) * D.step + D.step * .6, maxd);
+      if (d0 > maxd) continue;
+      ctx.strokeStyle = w ? "rgba(70,215,232,1)" : "rgba(242,246,248,.78)";
+      ctx.lineWidth = w ? lw * 2.6 : lw * 1.3;
+      if (w) { ctx.shadowColor = "rgba(53,180,198,.8)"; ctx.shadowBlur = lw * 5; } else ctx.shadowBlur = 0;
+      ctx.beginPath(); ctx.moveTo(cx + dx * d0 * s, cy + dy * d0 * s); ctx.lineTo(cx + dx * d1 * s, cy + dy * d1 * s); ctx.stroke();
+    }
+  }
+  ctx.shadowBlur = 0; ctx.fillStyle = "#E3A957"; ctx.beginPath();
+  D.fp.forEach(([x, y], i) => i ? ctx.lineTo(x * s, y * s) : ctx.moveTo(x * s, y * s)); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.arc(cx, cy, W / 70, 0, 7); ctx.strokeStyle = "rgba(227,169,87,.6)"; ctx.lineWidth = 2; ctx.stroke();
+  floorNum.textContent = floor; waterNum.textContent = f.w; range.value = floor; updateTower(floor);
+  firstNote.textContent = floor < FIRST ? "Water stays hidden until floor " + FIRST + "." : "The harbour first appears at floor " + FIRST + ".";
+}
+function climb() {
+  cancelAnimationFrame(raf); if (reduce) { floor = NF - 1; grow = 1; draw(); return; }
+  floor = 0; grow = 0; let last = performance.now();
+  const step = t => { const dt = (t - last) / 1000; last = t;
+    grow += dt * 3.2; if (grow >= 1) { grow = 1; if (floor < NF - 1) { floor++; grow = .35; } else { draw(); btn.textContent = "Climb again"; return; } }
+    draw(); raf = requestAnimationFrame(step); };
+  btn.textContent = "Climbing\u2026"; raf = requestAnimationFrame(step);
+}
+img.onload = () => { size(); new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting) { o.disconnect(); climb(); } }), { threshold: .5 }).observe(cv); };
+window.addEventListener("resize", size);
+btn.addEventListener("click", climb);
+range.addEventListener("input", () => { cancelAnimationFrame(raf); floor = +range.value; grow = 1; btn.textContent = "Start climbing"; draw(); });
+</script>
+</body>
+</html>
